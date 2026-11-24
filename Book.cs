@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 namespace Biblioteka
 {
     class Book
@@ -33,36 +34,32 @@ namespace Biblioteka
             switch (input_int)
             {
                 case 1:
-                    foreach (var ksiazka in ksiazki)
-                        {
-                            Console.WriteLine($"{ksiazka.id}: Tytuł: {ksiazka.tytul}, Autor: {ksiazka.autor}, Czy można wypożyczyć: {ksiazka.status}");
-                        }
+                    Ksiazka.Wypisz(ksiazki);
 
                     Console.WriteLine("Aby powrócić do głównego menu kliknij enter");
                     ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                     break;
                 case 2:
-                   foreach (var ksiazka in ksiazki)
-                        {
-                            Console.WriteLine($"{ksiazka.id}: Tytuł {ksiazka.tytul}, Czy można wypożyczyć: {ksiazka.status}");
-                        }
+                    Ksiazka.Wypisz(ksiazki);
                     Console.WriteLine("Wpisz numer ksiązki którą chcesz wypożyczyć: ");
                     string? pozycja_borrow = Console.ReadLine();
                     if(int.TryParse(pozycja_borrow, out int pozycja_borrow_int)){
-                    foreach (var ksiazka in ksiazki){
-                    if (pozycja_borrow_int == ksiazka.id)
-                    {
+                    var borrowed = ksiazki.FirstOrDefault(b => b.id == pozycja_borrow_int);
+                        if(borrowed != null){
                         try
                         {
-                            ksiazka.Borrow();
+                            borrowed.Borrow();
                       
                         }
                         catch(InvalidOperationException ex)
                         {
                             Console.WriteLine(ex.Message);
                         }
-                    }
-                    }
+                        }
+                        else
+                            {
+                                Console.WriteLine("Podano numer pozycji, która nie istnieje!");
+                            }
                     }
                     else
                         {
@@ -71,33 +68,33 @@ namespace Biblioteka
                         }
                     break;
                 case 3:
-                   foreach (var ksiazka in ksiazki)
-                        {
-                            Console.WriteLine($"{ksiazka.id}: Tytuł {ksiazka.tytul}, Czy można wypożyczyć: {ksiazka.status}");
-                        }
+                    Ksiazka.Wypisz(ksiazki);
                     Console.WriteLine("Wpisz numer książki którą chcesz oddać: ");
                     string? pozycja_return_string = Console.ReadLine();
                     if(int.TryParse(pozycja_return_string, out int pozycja_return_int)){
-                    foreach (var ksiazka in ksiazki){
-                    if (pozycja_return_int == ksiazka.id)
+                    var returned = ksiazki.FirstOrDefault(r => r.id == pozycja_return_int);
+                    if (returned != null)
                     {
                         try
                             {
-                                ksiazka.Return();
+                                returned.Return();
                             }
                         catch(InvalidOperationException ex)
                         {
                             Console.WriteLine(ex.Message);
                         }
                     }
-                    }
-                    break;
+                    else
+                                {
+                                    Console.WriteLine("Podano numer pozycji, która nie istnieje!");
+                                }
                     }
                     else
                             {
                                 Console.WriteLine("Podano niedozwolony znak!");
                                 break;
                             }
+                    break;
                 case 4:
                 running = false;
                     break;
@@ -144,5 +141,15 @@ namespace Biblioteka
                 throw (new InvalidOperationException("Tej książki nie można oddać, ponieważ nie jest wypożyczona!\n"));
             }
         }
+
+        public static void Wypisz(List<Ksiazka> ksiazki)
+        {
+            foreach(var ksiazka in ksiazki)
+            {
+                Console.WriteLine($"{ksiazka.id}: Tytuł {ksiazka.tytul}, Autor: {ksiazka.autor}, Czy można wypożyczyć: {ksiazka.status}");
+            }
+        }
+
+
     }
 }
