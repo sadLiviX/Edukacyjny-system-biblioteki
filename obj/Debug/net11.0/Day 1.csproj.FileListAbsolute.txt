@@ -14,3 +14,4 @@ C:\Users\Kuba\Desktop\Day 1\obj\Debug\net11.0\Day 1.pdb
 C:\Users\Kuba\Desktop\Day 1\obj\Debug\net11.0\Day 1.genruntimeconfig.cache
 C:\Users\Kuba\Desktop\Day 1\obj\Debug\net11.0\ref\Day 1.dll
 C:\Users\Kuba\Desktop\Day 1\obj\Debug\net11.0\Day 1.csproj.Up2Date
+C:\Users\Kuba\Desktop\Day 1\obj\Debug\net11.0\Day 1.sourcelink.json

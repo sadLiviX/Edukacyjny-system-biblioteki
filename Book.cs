@@ -5,19 +5,20 @@ namespace Biblioteka
     {
         static void Main(string[] args)
         {
-            Ksiazka ksiazka1 = new Ksiazka();
-            Ksiazka ksiazka2 = new Ksiazka();
+            bool running = true;
 
-            ksiazka1.tytul = "Pan Tadeusz";
-            ksiazka1.autor = "Adam Mickiewicz";
-            ksiazka1.status = true;
-            ksiazka1.id = 1;
+            var ksiazki = new List<Ksiazka>
+            {
+                new Ksiazka(1, "Pan Tadeusz", "Adam Mickiewicz", true),
+                new Ksiazka(2, "Lalka", "Bolesław Prus", false),
+                new Ksiazka(3, "Wiedźmin", "Andrzej Sapkowski", false),
+                new Ksiazka(4, "Gra o tron", "George R. R. Martin", true),
+                new Ksiazka(5, "Harry Potter", "J. K. Rowling", true),
+                new Ksiazka(6, "Władca Pierścieni", "J. R. R. Tolkien", false)
 
-            ksiazka2.tytul = "Lalka";
-            ksiazka2.autor = "Bolesław Prus";
-            ksiazka2.status = false;
-            ksiazka2.id = 2;
+            };
 
+            while(running){
             Console.WriteLine("""
             Witaj w systemie naszej biblioteki! 
             1. Chce wyświetlić listę wszystkich książek. 
@@ -27,85 +28,121 @@ namespace Biblioteka
             """);
 
             Console.WriteLine("Wybierz opcje: ");
-            int input = int.Parse(Console.ReadLine());
-
-            switch (input)
+            string? input_string = Console.ReadLine();
+            if(int.TryParse(input_string, out int input_int)){
+            switch (input_int)
             {
                 case 1:
-                    ksiazka1.WypiszInfo(ksiazka1.tytul, ksiazka1.autor, ksiazka1.status);
-                    ksiazka2.WypiszInfo(ksiazka2.tytul, ksiazka2.autor, ksiazka2.status);
+                    foreach (var ksiazka in ksiazki)
+                        {
+                            Console.WriteLine($"{ksiazka.id}: Tytuł: {ksiazka.tytul}, Autor: {ksiazka.autor}, Czy można wypożyczyć: {ksiazka.status}");
+                        }
+
+                    Console.WriteLine("Aby powrócić do głównego menu kliknij enter");
+                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                     break;
                 case 2:
-                    ksiazka1.WypiszId(ksiazka1.id, ksiazka1.tytul);
-                    ksiazka2.WypiszId(ksiazka2.id, ksiazka2.tytul);
-
-                    Console.WriteLine("Wpisz ID ksiązki którą chcesz wypożyczyć: ");
-                    int input2 = int.Parse(Console.ReadLine());
-                    if (input2 == 1)
+                   foreach (var ksiazka in ksiazki)
+                        {
+                            Console.WriteLine($"{ksiazka.id}: Tytuł {ksiazka.tytul}, Czy można wypożyczyć: {ksiazka.status}");
+                        }
+                    Console.WriteLine("Wpisz numer ksiązki którą chcesz wypożyczyć: ");
+                    string? pozycja_borrow = Console.ReadLine();
+                    if(int.TryParse(pozycja_borrow, out int pozycja_borrow_int)){
+                    foreach (var ksiazka in ksiazki){
+                    if (pozycja_borrow_int == ksiazka.id)
                     {
-                        ksiazka1.Borrow(ksiazka1.id, ksiazka1.status);
+                        try
+                        {
+                            ksiazka.Borrow();
+                      
+                        }
+                        catch(InvalidOperationException ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
                     }
-                    else if (input2 == 2)
-                    {
-                        ksiazka2.Borrow(ksiazka2.id, ksiazka2.status);        
+                    }
                     }
                     else
-                    {
-                        return;            
-                    }
+                        {
+                            Console.WriteLine("Podano niedozwolony znak!");
+                            break;
+                        }
                     break;
                 case 3:
-                    ksiazka1.WypiszId(ksiazka1.id, ksiazka1.tytul);
-                    ksiazka2.WypiszId(ksiazka2.id, ksiazka2.tytul);
-
-                    Console.WriteLine("Wpisz ID książki którą chcesz oddać: ");
-                    int input3 = int.Parse(Console.ReadLine());
-                    if (input3 == 1)
+                   foreach (var ksiazka in ksiazki)
+                        {
+                            Console.WriteLine($"{ksiazka.id}: Tytuł {ksiazka.tytul}, Czy można wypożyczyć: {ksiazka.status}");
+                        }
+                    Console.WriteLine("Wpisz numer książki którą chcesz oddać: ");
+                    string? pozycja_return_string = Console.ReadLine();
+                    if(int.TryParse(pozycja_return_string, out int pozycja_return_int)){
+                    foreach (var ksiazka in ksiazki){
+                    if (pozycja_return_int == ksiazka.id)
                     {
-                        ksiazka1.Return(ksiazka1.id, ksiazka1.status);
+                        try
+                            {
+                                ksiazka.Return();
+                            }
+                        catch(InvalidOperationException ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
                     }
-                    else if (input3 == 2)
-                    {
-                        ksiazka2.Return(ksiazka1.id, ksiazka2.status);
+                    }
+                    break;
                     }
                     else
-                    {
-                        break;
-                    }
-                    break;
+                            {
+                                Console.WriteLine("Podano niedozwolony znak!");
+                                break;
+                            }
                 case 4:
+                running = false;
                     break;
             }
+            }
+            else
+                {
+                    Console.WriteLine("Podano niedozwolony znak!");
+                }
 
         }
     }
+    }
     class Ksiazka
     {
+        public int id;
         public string tytul;
         public string autor;
         public bool status;
-        public int id;
+        public Ksiazka(int Id, string Tytul, string Autor, bool Status) {id = Id; tytul = Tytul; autor = Autor; status = Status; }
 
-        public void WypiszInfo(string tyl, string aut, bool stat)
+        public void Borrow()
         {
-            Console.WriteLine($"Książka o tytule: {tyl} \nnapisana przez autora: {aut} \nczy jest możliwa do wypożyczenia: {stat}\n");
+            if (status)
+            {
+            Console.WriteLine($"Książka o ID: {id}, została wypożyczona!\n");
+            status = false;
+            }
+            else
+            {
+                throw(new InvalidOperationException("Tej książki nie można wypożyczyć, ponieważ jest już wypożyczona!\n"));
+            }
         }
 
-        public void WypiszId(int id, string tyl)
+        public void Return()
         {
-            Console.WriteLine($"ID: {id} \nTytuł: {tyl}");
-        }
-
-        public void Borrow(int id, bool stat)
-        {
-            bool status = false;
-            Console.WriteLine($"Książka o ID: {id}, została wypożyczona!");
-        }
-
-        public void Return(int id, bool stat)
-        {
-            bool status = true;
-            Console.WriteLine($"Książka o ID: {id}, została zwrócona! Dziękujemy.");
+            if (!status)
+            {
+            Console.WriteLine($"Książka o ID: {id}, została zwrócona! Dziękujemy.\n");
+            status = true;
+            }
+            else
+            {
+                throw (new InvalidOperationException("Tej książki nie można oddać, ponieważ nie jest wypożyczona!\n"));
+            }
         }
     }
 }
