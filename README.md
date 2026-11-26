@@ -21,6 +21,7 @@ Aby postawić bazę danych:
 6) sprawdzić czy się udało zapytaniem np. "SELECT * FROM Books"
 
 Zapytania znajdujące się w pliku "zapytania" w folderze "sql" dowodzą ćwiczeń wykonywanych na bazie danych, w których utrwalałem polecenia w SQL takie jak: JOIN-y, GROUP BY z HAVING oraz wyszukiwanie rekordów bez pary.
+Plik "zapytania" wymaga wcześniejszego uruchomienia pliku z tabelami.
 
 Baza składa się z trzech tabel: "Books", "Members" i "Loans". W tabeli "Books" znajdują się wszystkie książki jakie posiada biblioteka. Tabela "Members" zawiera informacje o członkach biblioteki. 
 Tabela "Loans" przechowuje informacje odnośnie każdego wypożyczenia, posiada ona również relacje z tabelami "Books" - poprzez pole "id_ksiazki" oraz "Members" - poprzez pole "id_czlonka". 
