@@ -16,7 +16,7 @@ Aby postawić bazę danych:
 1) mieć zainstalowany SQL Server 25
 2) zainstalować oraz uruchomić narzędzie SSMS 22
 3) otworzyć nowe zapytanie
-4) przekleić zawartość pliku "1", który tworzy całą bazę, tabele oraz dodaje do nich testowe rekody, znajdującego się w folderze "sql"
+4) przekleić zawartość pliku "tworzenie tabel", który tworzy całą bazę, tabele oraz dodaje do nich testowe rekody, znajdującego się w folderze "sql"
 5) wykonać zapytanie
 6) sprawdzić czy się udało zapytaniem np. "SELECT * FROM Books"
 
